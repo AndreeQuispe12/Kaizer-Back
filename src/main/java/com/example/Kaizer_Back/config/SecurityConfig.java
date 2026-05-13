@@ -32,6 +32,7 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
 						.anyRequest().authenticated()
 				)
+				.cors(Customizer.withDefaults()) // Esto le dice a Spring Security: "Usa mi CorsConfig"
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
@@ -44,5 +45,6 @@ public class SecurityConfig {
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
+		
 	}
 }
