@@ -1,0 +1,42 @@
+# Directorios de compilación local
+target/
+build/
+out/
+bin/
+
+# Archivos de configuración sensible (¡MUY IMPORTANTE!)
+.env
+*.local
+secrets.properties
+
+# Archivos de IDE (VS Code, IntelliJ, Eclipse)
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+.settings/
+.classpath
+.project
+.factorypath
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Logs
+*.log
+logs/
+
+# Sistema operativo
+DS_Store
+Thumbs.db
+
+# Docker (para evitar que se copie a sí mismo)
+Dockerfile
+.dockerignore
+
+# Maven wrapper (ya los copiamos explícitamente en el Dockerfile,
+# pero es buena práctica evitar que se copien con el comando COPY src src)
+.mvn/wrapper/*.jar
