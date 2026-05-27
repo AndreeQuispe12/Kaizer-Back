@@ -27,8 +27,10 @@ public class SecurityConfig {
 				.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/health").permitAll()
 						.requestMatchers("/api/auth/**").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/checkout").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
 						.anyRequest().authenticated()
 				)
