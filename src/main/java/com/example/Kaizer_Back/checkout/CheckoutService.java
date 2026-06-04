@@ -31,7 +31,9 @@ public class CheckoutService {
 		this.usuarioRepository = usuarioRepository;
 	}
 
-	@Transactional
+	// rollbackFor = Exception.class garantiza rollback también ante excepciones checked
+	// (ej. fallo de red al persistir), no solo RuntimeException como hace el default.
+	@Transactional(rollbackFor = Exception.class)
 	public CheckoutResponse checkout(CheckoutRequest request, Long userId) {
 		// Crea pedido (orden) y aplica descuento de stock con bloqueo pesimista.
 		// Esto mitiga race conditions cuando múltiples compras intentan tomar el mismo stock.
