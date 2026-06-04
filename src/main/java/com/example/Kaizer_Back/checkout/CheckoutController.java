@@ -1,9 +1,11 @@
 package com.example.Kaizer_Back.checkout;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.Kaizer_Back.auth.UsuarioPrincipal;
 import com.example.Kaizer_Back.checkout.dto.CheckoutRequest;
 import com.example.Kaizer_Back.checkout.dto.CheckoutResponse;
 
@@ -19,8 +21,12 @@ public class CheckoutController {
 	}
 
 	@PostMapping("/api/checkout")
-	public CheckoutResponse checkout(@Valid @RequestBody CheckoutRequest request) {
-		return checkoutService.checkout(request);
+	public CheckoutResponse checkout(
+			// El endpoint es público; principal es null si el usuario no está autenticado.
+			@AuthenticationPrincipal UsuarioPrincipal principal,
+			@Valid @RequestBody CheckoutRequest request) {
+		Long userId = principal != null ? principal.getId() : null;
+		return checkoutService.checkout(request, userId);
 	}
 }
 

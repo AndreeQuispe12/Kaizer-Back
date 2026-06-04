@@ -5,7 +5,11 @@ import java.time.OffsetDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.example.Kaizer_Back.usuario.dto.UsuarioProfileRequest;
+import com.example.Kaizer_Back.usuario.dto.UsuarioProfileResponse;
 
 @Service
 public class UsuarioService {
@@ -31,5 +35,20 @@ public class UsuarioService {
 				.build();
 
 		return usuarioRepository.save(usuario);
+	}
+
+	@Transactional
+	public UsuarioProfileResponse actualizarPerfil(Long userId, UsuarioProfileRequest request) {
+		Usuario usuario = usuarioRepository.findById(userId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+		// Actualización parcial: solo se mutan los campos enviados en el request
+		// para no borrar datos existentes cuando el cliente omite un campo.
+		if (request.nombre() != null) usuario.setNombre(request.nombre());
+		if (request.telefono() != null) usuario.setTelefono(request.telefono());
+		if (request.direccion() != null) usuario.setDireccion(request.direccion());
+		if (request.ciudad() != null) usuario.setCiudad(request.ciudad());
+
+		return UsuarioProfileResponse.from(usuarioRepository.save(usuario));
 	}
 }

@@ -29,6 +29,12 @@ public class Usuario {
     @Column(length = 20)
     private String telefono;
 
+    @Column(columnDefinition = "TEXT")
+    private String direccion;
+
+    @Column(length = 100)
+    private String ciudad;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private Role role;

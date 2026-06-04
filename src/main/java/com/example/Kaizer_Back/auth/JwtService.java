@@ -33,16 +33,28 @@ public class JwtService {
 		Instant now = Instant.now();
 		Instant exp = now.plus(expirationMinutes, ChronoUnit.MINUTES);
 
-		return Jwts.builder()
+		var builder = Jwts.builder()
 				.subject(userDetails.getUsername())
 				.issuedAt(Date.from(now))
-				.expiration(Date.from(exp))
-				.signWith(key)
-				.compact();
+				.expiration(Date.from(exp));
+
+		// Incrusta el ID primario como claim para que los controladores puedan
+		// obtenerlo sin hacer una segunda consulta a la BD por email.
+		if (userDetails instanceof UsuarioPrincipal principal) {
+			builder.claim("uid", principal.getId());
+		}
+
+		return builder.signWith(key).compact();
 	}
 
 	public String extractUsername(String token) {
 		return extractAllClaims(token).getSubject();
+	}
+
+	public Long extractUserId(String token) {
+		Object uid = extractAllClaims(token).get("uid");
+		if (uid instanceof Number n) return n.longValue();
+		return null;
 	}
 
 	public boolean isTokenValid(String token, UserDetails userDetails) {

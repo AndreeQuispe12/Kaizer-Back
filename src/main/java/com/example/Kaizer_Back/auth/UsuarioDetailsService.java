@@ -1,7 +1,8 @@
 package com.example.Kaizer_Back.auth;
 
+import java.util.List;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,10 +24,11 @@ public class UsuarioDetailsService implements UserDetailsService {
 		var usuario = usuarioRepository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException("Credenciales inválidas"));
 
-		return new User(
+		return new UsuarioPrincipal(
+				usuario.getId(),
 				usuario.getEmail(),
 				usuario.getPasswordHash(),
-				java.util.List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRole().name()))
+				List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRole().name()))
 		);
 	}
 }

@@ -6,6 +6,8 @@ create table if not exists usuarios (
   password_hash varchar(100) not null,
   nombre varchar(100),
   telefono varchar(20),
+  direccion text,
+  ciudad varchar(100),
   role varchar(30) not null default 'USER',
   created_at timestamptz not null default now()
 );

@@ -14,23 +14,32 @@ import com.example.Kaizer_Back.producto.PedidoItem;
 import com.example.Kaizer_Back.producto.PedidoRepository;
 import com.example.Kaizer_Back.producto.Producto;
 import com.example.Kaizer_Back.producto.ProductoRepository;
+import com.example.Kaizer_Back.usuario.UsuarioRepository;
 
 @Service
 public class CheckoutService {
 
 	private final ProductoRepository productoRepository;
 	private final PedidoRepository pedidoRepository;
+	private final UsuarioRepository usuarioRepository;
 
-	public CheckoutService(ProductoRepository productoRepository, PedidoRepository pedidoRepository) {
+	public CheckoutService(ProductoRepository productoRepository, PedidoRepository pedidoRepository,
+			UsuarioRepository usuarioRepository) {
 		this.productoRepository = productoRepository;
 		this.pedidoRepository = pedidoRepository;
+		this.usuarioRepository = usuarioRepository;
 	}
 
 	@Transactional
-	public CheckoutResponse checkout(CheckoutRequest request) {
+	public CheckoutResponse checkout(CheckoutRequest request, Long userId) {
 		// Crea pedido (orden) y aplica descuento de stock con bloqueo pesimista.
 		// Esto mitiga race conditions cuando múltiples compras intentan tomar el mismo stock.
 		Pedido pedido = Pedido.builder().estado("CREADO").build();
+
+		// getReferenceById crea un proxy sin consultar la BD, suficiente para persistir la FK.
+		if (userId != null) {
+			pedido.setUsuario(usuarioRepository.getReferenceById(userId));
+		}
 
 		BigDecimal total = BigDecimal.ZERO;
 
