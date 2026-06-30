@@ -22,6 +22,11 @@ public class UsuarioController {
 		this.usuarioService = usuarioService;
 	}
 
+	@GetMapping("/perfil")
+	public UsuarioProfileResponse obtenerPerfil(@AuthenticationPrincipal UsuarioPrincipal principal) {
+		return usuarioService.obtenerPerfil(principal.getId());
+	}
+
 	@PutMapping("/perfil")
 	public UsuarioProfileResponse actualizarPerfil(
 			@AuthenticationPrincipal UsuarioPrincipal principal,

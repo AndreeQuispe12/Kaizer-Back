@@ -38,6 +38,12 @@ public class UsuarioService {
 		return usuarioRepository.save(usuario);
 	}
 
+	public UsuarioProfileResponse obtenerPerfil(Long userId) {
+		Usuario usuario = usuarioRepository.findById(userId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+		return UsuarioProfileResponse.from(usuario);
+	}
+
 	@Transactional(rollbackFor = Exception.class)
 	public UsuarioProfileResponse actualizarPerfil(Long userId, UsuarioProfileRequest request) {
 		Usuario usuario = usuarioRepository.findById(userId)

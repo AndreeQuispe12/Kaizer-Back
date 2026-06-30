@@ -38,9 +38,10 @@ public class JwtService {
 				.issuedAt(Date.from(now))
 				.expiration(Date.from(exp));
 
-		// Incrusta el ID primario y el rol para evitar consultas redundantes a la BD.
+		// Incrusta el ID primario, nombre y rol para evitar consultas redundantes a la BD.
 		if (userDetails instanceof UsuarioPrincipal principal) {
 			builder.claim("uid", principal.getId());
+			if (principal.getNombre() != null) builder.claim("nombre", principal.getNombre());
 			principal.getAuthorities().stream()
 					.findFirst()
 					.ifPresent(a -> {

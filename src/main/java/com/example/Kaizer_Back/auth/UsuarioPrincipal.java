@@ -11,20 +11,21 @@ public class UsuarioPrincipal implements UserDetails {
 
 	private final Long id;
 	private final String email;
+	private final String nombre;
 	private final String passwordHash;
 	private final Collection<? extends GrantedAuthority> authorities;
 
-	public UsuarioPrincipal(Long id, String email, String passwordHash,
+	public UsuarioPrincipal(Long id, String email, String nombre, String passwordHash,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.email = email;
+		this.nombre = nombre;
 		this.passwordHash = passwordHash;
 		this.authorities = authorities;
 	}
 
-	public Long getId() {
-		return id;
-	}
+	public Long getId() { return id; }
+	public String getNombre() { return nombre; }
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
