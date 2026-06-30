@@ -30,7 +30,7 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.GET, "/api/health").permitAll()
 						.requestMatchers("/api/auth/**").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
-						.requestMatchers(HttpMethod.POST, "/api/checkout").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/checkout").authenticated()
 						// Consultas públicas para autocompletado en registro y checkout
 						.requestMatchers(HttpMethod.GET, "/api/consulta/dni/**").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/consulta/ruc/**").permitAll()

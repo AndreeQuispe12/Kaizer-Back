@@ -38,10 +38,17 @@ public class JwtService {
 				.issuedAt(Date.from(now))
 				.expiration(Date.from(exp));
 
-		// Incrusta el ID primario como claim para que los controladores puedan
-		// obtenerlo sin hacer una segunda consulta a la BD por email.
+		// Incrusta el ID primario y el rol para evitar consultas redundantes a la BD.
 		if (userDetails instanceof UsuarioPrincipal principal) {
 			builder.claim("uid", principal.getId());
+			principal.getAuthorities().stream()
+					.findFirst()
+					.ifPresent(a -> {
+						String authority = a.getAuthority();
+						builder.claim("role", authority.startsWith("ROLE_")
+								? authority.substring(5)
+								: authority);
+					});
 		}
 
 		return builder.signWith(key).compact();
